@@ -1,0 +1,19 @@
+skip-validation: true
+dependencies:
+  "pipe0": ./target/wasm32-wasip2/release/middlybiddly2.wasm
+  "biz": ./target/wasm32-wasip2/release/middleware_terrifying_nonsense.wasm
+instantiations:
+  root:
+    # dependency: "pipe0i"
+    arguments:
+      "spin:up/next@3.5.0":
+        instance: "pipe0i"
+        export: "wasi:http/handler@0.3.0-rc-2025-08-15"
+  "pipe0i":
+    dependency: "pipe0"
+    arguments:
+      "spin:up/next@3.5.0":
+        instance: bizi
+        export: "wasi:http/handler@0.3.0-rc-2025-08-15"
+  bizi:
+    dependency: biz

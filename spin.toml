@@ -1,0 +1,35 @@
+# #:schema https://schemas.spinframework.dev/spin/manifest-v2/latest.json
+
+spin_manifest_version = 2
+
+[application]
+name = "middleware-terrifying-nonsense"
+version = "0.1.0"
+authors = ["itowlson <ivan.towlson@fermyon.com>"]
+description = ""
+
+[[trigger.http]]
+route = "/..."
+component = "middleware-terrifying-nonsense"
+
+[component.middleware-terrifying-nonsense]
+source = "target/wasm32-wasip2/release/middleware_terrifying_nonsense.wasm"
+pipeline = [{ path = "target/wasm32-wasip2/release/middlybiddly.wasm" }, { path = "target/wasm32-wasip2/release/middlybiddly2.wasm" }]
+#pipeline = [{ path = "target/wasm32-wasip2/release/middlybiddly.wasm" }]
+[component.middleware-terrifying-nonsense.build]
+command = "cargo +beta build --target wasm32-wasip2 --release"
+watch = ["src/**/*.rs", "Cargo.toml"]
+
+# [component.middlybiddly]
+# source = "target/wasm32-wasip2/release/middlybiddly.wasm"
+# [component.middlybiddly.build]
+# workdir = "middlybiddly"
+# command = "cargo +beta build --target wasm32-wasip2 --release"
+# watch = ["src/**/*.rs", "Cargo.toml"]
+
+# [component.middlybiddly2]
+# source = "target/wasm32-wasip2/release/middlybiddly2.wasm"
+# [component.middlybiddly2.build]
+# workdir = "middlybiddly2"
+# command = "cargo +beta build --target wasm32-wasip2 --release"
+# watch = ["src/**/*.rs", "Cargo.toml"]
