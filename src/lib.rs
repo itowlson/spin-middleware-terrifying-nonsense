@@ -1,32 +1,10 @@
-wit_bindgen::generate!({
-    path: "./wit",
-    world: "spin:up/http-trigger@3.5.0",
-    async: true,
-    generate_all,
-});
+use spin_sdk::http_wasip3::{IntoResponse, Request};
 
-use wasi::http0_3_0_rc_2025_08_15::types::{Request, Response, ErrorCode, Fields};
-
-struct Guest;
-
-impl exports::wasi::http0_3_0_rc_2025_08_15::handler::Guest for Guest {
-    #[allow(async_fn_in_trait)]
-    async fn handle(request: Request) -> Result<Response,ErrorCode> {
-        handle_middleware_terrifying_nonsense(request).await
-    }
-}
-
-export!(Guest);
-
-
-async fn handle_middleware_terrifying_nonsense(req: Request) -> Result<Response, ErrorCode> {
-    for (name, value) in req.get_headers().await.copy_all().await {
-        println!("HEADER: {name}={}", String::from_utf8_lossy(&value));
+#[spin_sdk::http_wasip3::http_service]
+async fn handle(request: Request) -> impl IntoResponse {
+    for (name, value) in request.headers() {
+        println!("HEADER: {name}={}", String::from_utf8_lossy(value.as_bytes()));
     }
 
-    let (_wr, trailers) = wit_future::new(|| Ok(None));
-
-    let (resp, _fr) = Response::new(Fields::new().await, None, trailers).await;
-
-    Ok(resp)
+    "done\n"
 }

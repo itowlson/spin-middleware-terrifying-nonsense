@@ -11,7 +11,8 @@ crate-type = ["cdylib"]
 
 [dependencies]
 anyhow = "1"
-# spin-sdk = "5.0.0"
+http = "1"
+spin-sdk = { version = "5.1.0", features = ["wasip3-unstable"] }
 wit-bindgen = "0.46"
 # wasip3 = "0.1.1"
 
