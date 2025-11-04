@@ -459,7 +459,10 @@ name = "middlybiddly"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "futures",
  "http",
+ "http-body",
+ "http-body-util",
  "spin-sdk",
  "wit-bindgen 0.46.0",
 ]
@@ -744,8 +747,6 @@ dependencies = [
 [[package]]
 name = "spin-executor"
 version = "5.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9fa74c56ad71afb64fff0566d7cb313567d0469ba2a75b0af58c323f59b74280"
 dependencies = [
  "futures",
  "once_cell",
@@ -755,8 +756,6 @@ dependencies = [
 [[package]]
 name = "spin-macro"
 version = "5.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "74edf3aab0f4e24b30e765d10fcdbff69aa2d1906907f3318c5f8a8106daef34"
 dependencies = [
  "anyhow",
  "bytes",
@@ -768,8 +767,6 @@ dependencies = [
 [[package]]
 name = "spin-sdk"
 version = "5.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5374bed998dc151d3c3a45ffdba3269d9f94ea6cf19f002ff7fc744edb09a5f8"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -797,8 +794,6 @@ dependencies = [
 [[package]]
 name = "spin-wasip3-http"
 version = "5.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6ce046d8cd12d5ee9f4f30f296eb9f839cb931b806fe810eda348ac7650ef3ee"
 dependencies = [
  "anyhow",
  "bytes",
@@ -811,8 +806,6 @@ dependencies = [
 [[package]]
 name = "spin-wasip3-http-macro"
 version = "5.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a4fe09921ac9ca4ecf4df324262c386fcfc0d9587af9f9d736db9fc6c21b3c24"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -975,8 +968,7 @@ dependencies = [
 [[package]]
 name = "wasip3"
 version = "0.2.1+wasi-0.3.0-rc-2025-09-16"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cbb2796323e2357ae2d4ba2b781a0392b533f40a5b9f534eef49b23e54186d64"
+source = "git+https://github.com/bytecodealliance/wasi-rs?rev=39548ce720c69e7000cf3ed3d89acab8b7d7236e#39548ce720c69e7000cf3ed3d89acab8b7d7236e"
 dependencies = [
  "bytes",
  "http",

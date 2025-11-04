@@ -11,22 +11,77 @@ wit_bindgen::generate!({
 use spin_sdk::http_wasip3::{IntoRequest, IntoResponse, Request};
 
 #[spin_sdk::http_wasip3::http_service]
-async fn handle(mut request: Request) -> impl IntoResponse {
-    munge(&mut request);
-    spin::up3_5_0::next::handle(request.into_request().unwrap()).await
+async fn handle(request: Request) -> impl IntoResponse {
+    let (request, stm_write_fut) = munge(request);
+    let send_fut = spin::up3_5_0::next::handle(request.into_request().unwrap());
+    let (resp, _arse) = futures::future::join(send_fut, stm_write_fut).await;
+    resp
 }
 
-fn munge(request: &mut Request) {
-    request.headers_mut().append("my-fake-auth-header", http::HeaderValue::from_static("HOLY COW IT WORKS"));
-    // mmm, forbidden header
-    request.headers_mut().remove("connection");
-    request.headers_mut().remove("host");
+fn munge(request: Request) -> (Request, impl Future<Output = ()>) {
+    let (mut parts, body) = request.into_parts();
 
-    // wat? how does og modify request body? why does request body have headers?
-    // let bod = request.body_mut();
-    // if let Some(bodd) = bod.take_unstarted() {
-    //     bodd.get_headers();
-    // }
+    parts.headers.append("my-fake-auth-header", http::HeaderValue::from_static("HOLY COW IT WORKS"));
+    // mmm, forbidden header
+    parts.headers.remove("connection");
+    parts.headers.remove("host");
+
+    // use spin_sdk::http_wasip3::body::IncomingBodyExt;
+    use http_body_util::BodyExt;
+
+    // let mut boddo = body.map_frame(|f| {
+    //     if let Some(data) = f.data_ref() {
+    //         let s = String::from_utf8_lossy(data);
+    //         http_body::Frame::new(s.to_uppercase().as_bytes())
+    //     } else {
+    //         f
+    //     }
+    // }).collect();
+
+    // let (_tfw, tfr) = spin_sdk::http_wasip3::wasip3::wit_future::new(|| Ok(None));
+    // let (req2, _) = spin_sdk::http_wasip3::wasip3::http::types::Request::new(
+    //     spin_sdk::http_wasip3::wasip3::http::types::Headers::new(),
+    //     Some(sr),
+    //     tfr,
+    //     None
+    // );
+    // let body2 = spin_sdk::http_wasip3::wasip3::http_compat::IncomingRequestBody::new(req2).unwrap();
+    // todo!()
+
+    let mut boddo = body.map_frame(|f| f);
+
+    let (_tfw, tfr) = spin_sdk::http_wasip3::wasip3::wit_future::new(|| Ok(None));
+    let (mut sw, sr) = spin_sdk::http_wasip3::wasip3::wit_stream::new();
+    let (req2, _) = spin_sdk::http_wasip3::wasip3::http::types::Request::new(
+        spin_sdk::http_wasip3::wasip3::http::types::Headers::new(),
+        Some(sr),
+        tfr,
+        None
+    );
+    let body2 = spin_sdk::http_wasip3::wasip3::http_compat::IncomingRequestBody::new(req2).unwrap();
+
+    let fut = async move {
+        loop {
+            let Some(f) = boddo.frame().await else {
+                println!("map_frame done");
+                break;
+            };
+            println!("mapped a frame, ok={}", f.is_ok());
+            let f = f.unwrap();
+            let Some(data) = f.data_ref() else {
+                println!("map_frame is past the data");
+                break;
+            };
+            let s = String::from_utf8_lossy(data);
+            println!("**orig** {s:?}");
+            let supper = s.to_uppercase();
+            println!("**uppo** {supper}");
+            sw.write_all(supper.into()).await;
+            // sw.write_all("BISCOTTI".into()).await;
+        }
+    };
+
+    (Request::from_parts(parts, body2), fut)
 }
 
 
