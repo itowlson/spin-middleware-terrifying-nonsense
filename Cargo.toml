@@ -11,6 +11,7 @@ crate-type = ["cdylib"]
 
 [dependencies]
 anyhow = "1"
+futures = "0.3.31"
 http = "1"
 spin-sdk = { path = "/home/ivan/github/spin-rust-sdk", features = ["wasip3-unstable"] }
 wit-bindgen = "0.46"

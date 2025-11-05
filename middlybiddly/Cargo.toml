@@ -8,6 +8,7 @@ crate-type = ["cdylib"]
 
 [dependencies]
 anyhow = "1"
+bytes = "*"
 futures = "0.3.31"
 http = "1"
 http-body = "1"

@@ -449,6 +449,7 @@ name = "middleware-terrifying-nonsense"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "futures",
  "http",
  "spin-sdk",
  "wit-bindgen 0.46.0",
@@ -459,6 +460,7 @@ name = "middlybiddly"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "bytes",
  "futures",
  "http",
  "http-body",

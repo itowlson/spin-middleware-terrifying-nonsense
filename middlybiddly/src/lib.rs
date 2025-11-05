@@ -12,13 +12,13 @@ use spin_sdk::http_wasip3::{IntoRequest, IntoResponse, Request};
 
 #[spin_sdk::http_wasip3::http_service]
 async fn handle(request: Request) -> impl IntoResponse {
-    let (request, stm_write_fut) = munge(request);
-    let send_fut = spin::up3_5_0::next::handle(request.into_request().unwrap());
-    let (resp, _arse) = futures::future::join(send_fut, stm_write_fut).await;
+    let request = munge(request).await;
+    let resp = spin::up3_5_0::next::handle(request.into_request().unwrap()).await;
+    // let (resp, _arse) = futures::future::join(send_fut, stm_write_fut).await;
     resp
 }
 
-fn munge(request: Request) -> (Request, impl Future<Output = ()>) {
+async fn munge(request: Request) -> http::Request<impl http_body::Body<Data = bytes::Bytes, Error = spin_sdk::http_wasip3::wasip3::http::handler::ErrorCode>> {
     let (mut parts, body) = request.into_parts();
 
     parts.headers.append("my-fake-auth-header", http::HeaderValue::from_static("HOLY COW IT WORKS"));
@@ -29,16 +29,19 @@ fn munge(request: Request) -> (Request, impl Future<Output = ()>) {
     // use spin_sdk::http_wasip3::body::IncomingBodyExt;
     use http_body_util::BodyExt;
 
-    // let mut boddo = body.map_frame(|f| {
-    //     if let Some(data) = f.data_ref() {
-    //         let s = String::from_utf8_lossy(data);
-    //         http_body::Frame::new(s.to_uppercase().as_bytes())
-    //     } else {
-    //         f
-    //     }
-    // }).collect();
+    let boddo = body.map_frame(|f| {
+        std::thread::sleep(std::time::Duration::from_millis(60));
+        if let Some(data) = f.data_ref() {
+            println!("txing a frame");
+            let s = String::from_utf8_lossy(data);
+            http_body::Frame::data(s.to_uppercase().into())
+        } else {
+            f
+        }
+    });
 
     // let (_tfw, tfr) = spin_sdk::http_wasip3::wasip3::wit_future::new(|| Ok(None));
+    // let (mut sw, sr) = spin_sdk::http_wasip3::wasip3::wit_stream::new();
     // let (req2, _) = spin_sdk::http_wasip3::wasip3::http::types::Request::new(
     //     spin_sdk::http_wasip3::wasip3::http::types::Headers::new(),
     //     Some(sr),
@@ -46,42 +49,44 @@ fn munge(request: Request) -> (Request, impl Future<Output = ()>) {
     //     None
     // );
     // let body2 = spin_sdk::http_wasip3::wasip3::http_compat::IncomingRequestBody::new(req2).unwrap();
-    // todo!()
 
-    let mut boddo = body.map_frame(|f| f);
+    http::Request::from_parts(parts, boddo)
 
-    let (_tfw, tfr) = spin_sdk::http_wasip3::wasip3::wit_future::new(|| Ok(None));
-    let (mut sw, sr) = spin_sdk::http_wasip3::wasip3::wit_stream::new();
-    let (req2, _) = spin_sdk::http_wasip3::wasip3::http::types::Request::new(
-        spin_sdk::http_wasip3::wasip3::http::types::Headers::new(),
-        Some(sr),
-        tfr,
-        None
-    );
-    let body2 = spin_sdk::http_wasip3::wasip3::http_compat::IncomingRequestBody::new(req2).unwrap();
+    // let mut boddo = body.map_frame(|f| f);
 
-    let fut = async move {
-        loop {
-            let Some(f) = boddo.frame().await else {
-                println!("map_frame done");
-                break;
-            };
-            println!("mapped a frame, ok={}", f.is_ok());
-            let f = f.unwrap();
-            let Some(data) = f.data_ref() else {
-                println!("map_frame is past the data");
-                break;
-            };
-            let s = String::from_utf8_lossy(data);
-            println!("**orig** {s:?}");
-            let supper = s.to_uppercase();
-            println!("**uppo** {supper}");
-            sw.write_all(supper.into()).await;
-            // sw.write_all("BISCOTTI".into()).await;
-        }
-    };
+    // let (_tfw, tfr) = spin_sdk::http_wasip3::wasip3::wit_future::new(|| Ok(None));
+    // let (mut sw, sr) = spin_sdk::http_wasip3::wasip3::wit_stream::new();
+    // let (req2, _) = spin_sdk::http_wasip3::wasip3::http::types::Request::new(
+    //     spin_sdk::http_wasip3::wasip3::http::types::Headers::new(),
+    //     Some(sr),
+    //     tfr,
+    //     None
+    // );
+    // let body2 = spin_sdk::http_wasip3::wasip3::http_compat::IncomingRequestBody::new(req2).unwrap();
 
-    (Request::from_parts(parts, body2), fut)
+    // let fut = async move {
+    //     loop {
+    //         let Some(f) = boddo.frame().await else {
+    //             println!("map_frame done");
+    //             break;
+    //         };
+    //         println!("mapped a frame, ok={}", f.is_ok());
+    //         let f = f.unwrap();
+    //         let Some(data) = f.data_ref() else {
+    //             println!("map_frame is past the data");
+    //             break;
+    //         };
+    //         let s = String::from_utf8_lossy(data);
+    //         println!("**orig** {s:?}");
+    //         let supper = s.to_uppercase();
+    //         println!("**uppo** {supper}");
+    //         sw.write_all(supper.into()).await;
+    //         // sw.write_all("BISCOTTI".into()).await;
+    //     }
+    // };
+
+    /////////////// THIS WAS SILLY BECAUSE WIT_BINDGEN::SPAWN EXISTS
+    // (Request::from_parts(parts, body2), fut)
 }
 
 
