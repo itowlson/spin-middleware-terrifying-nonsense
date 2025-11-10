@@ -14,6 +14,12 @@ component = "middleware-terrifying-nonsense"
 components.middleware = ["middlybiddly", "middlybiddly2"]
 executor = { type = "wasip3-unstable" }
 
+[[trigger.http]]
+route = "/snerk"
+component = "middleware-terrifying-nonsense"
+components.middleware = ["middlybiddly2"]
+executor = { type = "wasip3-unstable" }
+
 [component.middleware-terrifying-nonsense]
 source = "target/wasm32-wasip2/release/middleware_terrifying_nonsense.wasm"
 [component.middleware-terrifying-nonsense.build]
