@@ -23,19 +23,19 @@ executor = { type = "wasip3-unstable" }
 [component.middleware-terrifying-nonsense]
 source = "target/wasm32-wasip2/release/middleware_terrifying_nonsense.wasm"
 [component.middleware-terrifying-nonsense.build]
-command = "cargo +1.90 build --target wasm32-wasip2 --release"
+command = "cargo build --target wasm32-wasip2 --release"
 watch = ["src/**/*.rs", "Cargo.toml"]
 
 [component.middlybiddly]
 source = "target/wasm32-wasip2/release/middlybiddly.wasm"
 [component.middlybiddly.build]
 workdir = "middlybiddly"
-command = "cargo +1.90 build --target wasm32-wasip2 --release"
+command = "cargo build --target wasm32-wasip2 --release"
 watch = ["src/**/*.rs", "Cargo.toml"]
 
 [component.middlybiddly2]
 source = "target/wasm32-wasip2/release/middlybiddly2.wasm"
 [component.middlybiddly2.build]
 workdir = "middlybiddly2"
-command = "cargo +1.90 build --target wasm32-wasip2 --release"
+command = "cargo build --target wasm32-wasip2 --release"
 watch = ["src/**/*.rs", "Cargo.toml"]

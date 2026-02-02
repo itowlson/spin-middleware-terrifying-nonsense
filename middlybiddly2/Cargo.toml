@@ -9,5 +9,5 @@ crate-type = ["cdylib"]
 [dependencies]
 anyhow = "1"
 http = "1"
-spin-sdk = { path = "/home/ivan/github/spin-rust-sdk", features = ["wasip3-unstable"] }
-wit-bindgen = "0.46"
+spin-sdk = { git = "https://github.com/itowlson/spin-rust-sdk", branch = "wasip3-rc-26-01", features = ["wasip3-unstable"] }
+wit-bindgen = "0.51"
