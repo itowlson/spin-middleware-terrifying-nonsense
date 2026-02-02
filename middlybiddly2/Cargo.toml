@@ -10,4 +10,4 @@ crate-type = ["cdylib"]
 anyhow = "1"
 http = "1"
 spin-sdk = { path = "/home/ivan/github/spin-rust-sdk", features = ["wasip3-unstable"] }
-wit-bindgen = "0.46"
+wit-bindgen = "0.51"
