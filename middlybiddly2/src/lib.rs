@@ -3,7 +3,7 @@ wit_bindgen::generate!({
     world: "wasi:http/middleware@0.3.0-rc-2026-01-06",
     async: true,
     with: {
-        "wasi:http/types@0.3.0-rc-2026-01-26": spin_sdk::http_wasip3::wasip3::http::types,
+        "wasi:http/types@0.3.0-rc-2026-01-06": spin_sdk::http_wasip3::wasip3::http::types,
     },
     features: ["clocks-timezone"],
     generate_all,
