@@ -13,5 +13,5 @@ futures = "0.3.31"
 http = "1"
 http-body = "1"
 http-body-util = "0.1.3"
-spin-sdk = { git = "https://github.com/itowlson/spin-rust-sdk", branch = "wasip3-rc-26-01", features = ["wasip3-unstable"] }
-wit-bindgen = "0.51"
+spin-sdk = { git = "https://github.com/spinframework/spin-rust-sdk", branch = "main" }
+wit-bindgen = "0.54"

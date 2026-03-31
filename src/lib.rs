@@ -1,8 +1,8 @@
-use spin_sdk::http_wasip3::{IntoResponse, Request};
-use spin_sdk::http_wasip3::body::IncomingBodyExt;
+use spin_sdk::http::{IntoResponse, Request};
+use spin_sdk::http::body::IncomingBodyExt;
 use futures::{SinkExt, StreamExt};
 
-#[spin_sdk::http_wasip3::http_service]
+#[spin_sdk::http_service]
 async fn handle(request: Request) -> impl IntoResponse {
     for (name, value) in request.headers() {
         println!("HEADER: {name}={}", String::from_utf8_lossy(value.as_bytes()));
@@ -13,7 +13,7 @@ async fn handle(request: Request) -> impl IntoResponse {
     let (mut tx, body) = stream_body();
     let response = http::Response::new(body);
 
-    spin_sdk::http_wasip3::wasip3::wit_bindgen::spawn(async move {
+    spin_sdk::http::wasip3::wit_bindgen::spawn(async move {
         tx.send("== INBOUND MESSAGE ==\n".into()).await.unwrap();
         loop {
             let Some(chunk) = ib.next().await else {
