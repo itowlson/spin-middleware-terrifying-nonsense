@@ -1,22 +1,22 @@
 wit_bindgen::generate!({
     path: "../wit",
-    world: "wasi:http/middleware@0.3.0-rc-2026-01-06",
+    world: "wasi:http/middleware@0.3.0-rc-2026-03-15",
     async: true,
     with: {
-        "wasi:http/types@0.3.0-rc-2026-01-06": spin_sdk::http_wasip3::wasip3::http::types,
+        "wasi:http/types@0.3.0-rc-2026-03-15": spin_sdk::http::wasip3::http::types,
     },
     generate_all,
 });
 
-use spin_sdk::http_wasip3::{IntoRequest, IntoResponse, Request};
+use spin_sdk::http::{IntoRequest, IntoResponse, Request};
 
-#[spin_sdk::http_wasip3::http_service]
+#[spin_sdk::http_service]
 async fn handle(request: Request) -> impl IntoResponse {
     let request = munge(request).await;
-    wasi::http0_3_0_rc_2026_01_06::handler::handle(request.into_request().unwrap()).await
+    wasi::http0_3_0_rc_2026_03_15::handler::handle(request.into_request().unwrap()).await
 }
 
-async fn munge(request: Request) -> http::Request<impl http_body::Body<Data = bytes::Bytes, Error = spin_sdk::http_wasip3::wasip3::http::types::ErrorCode>> {
+async fn munge(request: Request) -> http::Request<impl http_body::Body<Data = bytes::Bytes, Error = spin_sdk::http::wasip3::http::types::ErrorCode>> {
     let (mut parts, body) = request.into_parts();
 
     parts.headers.append("my-fake-auth-header", http::HeaderValue::from_static("HOLY COW IT WORKS"));

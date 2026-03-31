@@ -11,14 +11,13 @@ description = ""
 [[trigger.http]]
 route = "/..."
 component = "middleware-terrifying-nonsense"
-components.middleware = ["middlybiddly", "middlybiddly2"]
-executor = { type = "wasip3-unstable" }
+#components.middleware = [{source = "target/wasm32-wasip2/release/middlybiddly.wasm"}, {source = "target/wasm32-wasip2/release/middlybiddly2.wasm"}]
+components.middleware = [{source = "target/wasm32-wasip2/release/middlybiddly.wasm"}, "middlybiddly2"]
 
 [[trigger.http]]
 route = "/snerk"
 component = "middleware-terrifying-nonsense"
 components.middleware = ["middlybiddly2"]
-executor = { type = "wasip3-unstable" }
 
 [component.middleware-terrifying-nonsense]
 source = "target/wasm32-wasip2/release/middleware_terrifying_nonsense.wasm"
