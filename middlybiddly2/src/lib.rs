@@ -3,7 +3,7 @@ wit_bindgen::generate!({
     world: "wasi:http/middleware@0.3.0-rc-2026-03-15",
     async: true,
     with: {
-        "wasi:http/types@0.3.0-rc-2026-03-15": spin_sdk::http::wasip3::http::types,
+        "wasi:http/types@0.3.0-rc-2026-03-15": spin_sdk::wasip3::http::types,
     },
     generate_all,
 });

@@ -13,5 +13,5 @@ futures = "0.3.31"
 http = "1"
 http-body = "1"
 http-body-util = "0.1.3"
-spin-sdk = { git = "https://github.com/spinframework/spin-rust-sdk", branch = "main" }
+spin-sdk = "6"
 wit-bindgen = "0.54"

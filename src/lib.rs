@@ -13,7 +13,7 @@ async fn handle(request: Request) -> impl IntoResponse {
     let (mut tx, body) = stream_body();
     let response = http::Response::new(body);
 
-    spin_sdk::http::wasip3::wit_bindgen::spawn(async move {
+    spin_sdk::wasip3::wit_bindgen::spawn(async move {
         tx.send("== INBOUND MESSAGE ==\n".into()).await.unwrap();
         loop {
             let Some(chunk) = ib.next().await else {

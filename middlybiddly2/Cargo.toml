@@ -9,5 +9,5 @@ crate-type = ["cdylib"]
 [dependencies]
 anyhow = "1"
 http = "1"
-spin-sdk = { git = "https://github.com/spinframework/spin-rust-sdk", branch = "main" }
+spin-sdk = "6"
 wit-bindgen = "0.54"

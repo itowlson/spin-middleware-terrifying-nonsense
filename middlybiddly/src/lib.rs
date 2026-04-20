@@ -3,7 +3,7 @@ wit_bindgen::generate!({
     world: "wasi:http/middleware@0.3.0-rc-2026-03-15",
     async: true,
     with: {
-        "wasi:http/types@0.3.0-rc-2026-03-15": spin_sdk::http::wasip3::http::types,
+        "wasi:http/types@0.3.0-rc-2026-03-15": spin_sdk::wasip3::http::types,
     },
     generate_all,
 });
@@ -16,7 +16,7 @@ async fn handle(request: Request) -> impl IntoResponse {
     wasi::http0_3_0_rc_2026_03_15::handler::handle(request.into_request().unwrap()).await
 }
 
-async fn munge(request: Request) -> http::Request<impl http_body::Body<Data = bytes::Bytes, Error = spin_sdk::http::wasip3::http::types::ErrorCode>> {
+async fn munge(request: Request) -> http::Request<impl http_body::Body<Data = bytes::Bytes, Error = spin_sdk::wasip3::http::types::ErrorCode>> {
     let (mut parts, body) = request.into_parts();
 
     parts.headers.append("my-fake-auth-header", http::HeaderValue::from_static("HOLY COW IT WORKS"));
