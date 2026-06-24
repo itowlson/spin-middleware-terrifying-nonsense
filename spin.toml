@@ -12,7 +12,7 @@ description = ""
 route = "/..."
 component = "middleware-terrifying-nonsense"
 #dependencies.middleware = [{path = "target/wasm32-wasip2/release/middlybiddly.wasm"}, {path = "target/wasm32-wasip2/release/middlybiddly2.wasm"}]
-dependencies.middleware = [{path = "target/wasm32-wasip2/release/middlybiddly.wasm"}, { component = "middlybiddly2"}]
+#dependencies.middleware = [{path = "target/wasm32-wasip2/release/middlybiddly.wasm"}, { component = "middlybiddly2", inherit_configuration = ["key_value_stores"]}]
 
 [[trigger.http]]
 route = "/snerk"
@@ -21,6 +21,7 @@ dependencies.middleware = [{ component = "middlybiddly2" }]
 
 [component.middleware-terrifying-nonsense]
 source = "target/wasm32-wasip2/release/middleware_terrifying_nonsense.wasm"
+key_value_stores = ["default"]
 [component.middleware-terrifying-nonsense.build]
 command = "cargo build --target wasm32-wasip2 --release"
 watch = ["src/**/*.rs", "Cargo.toml"]

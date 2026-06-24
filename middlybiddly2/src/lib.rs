@@ -12,6 +12,8 @@ use spin_sdk::http::{IntoRequest, IntoResponse, Request};
 
 #[spin_sdk::http_service]
 async fn handle(mut request: Request) -> impl IntoResponse {
+    // let store = spin_sdk::key_value::Store::open_default().await.unwrap();
+    // store.set("last", request.uri().path().as_bytes()).await.unwrap();
     munge(&mut request);
     wasi::http0_3_0_rc_2026_03_15::handler::handle(request.into_request().unwrap()).await
 }

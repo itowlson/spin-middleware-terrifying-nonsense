@@ -7,6 +7,8 @@ async fn handle(request: Request) -> impl IntoResponse {
     for (name, value) in request.headers() {
         println!("HEADER: {name}={}", String::from_utf8_lossy(value.as_bytes()));
     }
+    let store = spin_sdk::key_value::Store::open_default().await.unwrap();
+    store.set("last", request.uri().path().as_bytes()).await.unwrap();
 
     let mut ib = request.into_body().stream();
 
